@@ -1,48 +1,42 @@
+import scala.util.Random
 
+class Student(name: String, surname: String, age: Int, val scholarship: Int, val priceCourse: Float)
+  extends Human(name, surname, age) {
 
-class Student(name:String, surname:String, age:Int, email:String, addr:Address, var login:String, var password:String,
-              var balance:Double, var fiat:Double, var smartcontrakt:Smartcontrakt )
-  extends Human(name, surname, age, email, addr) with  TraitBirga{
-  private var _login:String = login
-  private var _password:String = password
-  private var _balance:Double = balance
-  private var _fiat:Double = fiat
-  private var _smartcontrakt:Smartcontrakt = smartcontrakt
+  private var studentTokens = 0.0f
 
+  def calculateTokens(grades: List[Int]): Float = {
+    studentTokens = 0.0f
 
-
-
-
-  def Login:String = _login
-  def Login(newValue:String): Unit = {
-    _login=newValue
-  }
-  def Password:String = _password
-  def Password(newValue:String): Unit = {
-    _password=newValue
-  }
-  def Balance:Double = _balance
-  def set_balance(newValue:Double, birga:Birrga): Unit = {
-    if(newValue<0){
-      var reserv = newValue.abs
-      var toup:(Double, Double) = buy(reserv, birga, _balance, _fiat)
-      _balance=toup._1
-      _fiat=toup._2
+    for (grade <- grades) {
+      studentTokens += {
+        if (grade == 1) 0.7f * priceCourse
+        else if (grade == 2) 0.8f * priceCourse
+        else if (grade == 3) 0.9f * priceCourse
+        else if (grade == 4) 1.0f * priceCourse
+        else if (grade == 5) 1.1f * priceCourse
+        else 0.0f
+      }
     }
-    else{
-      _balance=newValue
+
+    studentTokens
+  }
+
+  def printStudentInfo(): Unit = {
+    val personInfo = super.toString()
+    val grades = List.fill(3)(List.fill(2)(Random.nextInt(5) + 1))
+
+    println(s"Name: $name")
+    println(s"Surname: $surname")
+    println(s"Age: $age")
+    println(s"Scholarship: $scholarship")
+    println(s"Оценки:")
+
+    for ((monthGrades, month) <- grades.zipWithIndex) {
+      println(s"  Month ${month + 1}: ${monthGrades.mkString(", ")}")
     }
-  }
-  def Fiat:Double = _fiat
-  def set_fiat(newValue:Double): Unit = {
-    _fiat=newValue
-  }
-  def Smartcontrakt:Smartcontrakt = _smartcontrakt
-  def Smartcontrakt(newValue:Smartcontrakt): Unit = {
-    _smartcontrakt=newValue
-  }
 
-  override def toString: String = super.toString() + s", ${_balance}" + s", ${_fiat}" + s", ${_smartcontrakt}"
-
-  override def Show(): String = super.Show() + s"\nBalance: ${_balance}\n" + s"\nFiat: ${_fiat}\n" + s"Smartcontrakt: ${_smartcontrakt.toString}\n"
+    calculateTokens(grades.flatten)
+    println(s"Кількість токенів: $studentTokens\n")
+  }
 }

@@ -1,31 +1,36 @@
+import scala.util.Random
 
 object Main {
   def main(args: Array[String]): Unit = {
-    var addr1 = new Address("Ukraine", "Kherson", 20)
-    var addr2 = new Address("Ukraine", "Kiev", 4)
-    var addr3 = new Address("Ukraine", "Kharkov", 22)
-    var smartcontrakt_1 = new Smartcontrakt(500, 6, 10)
-    var smartcontrakt_2 = new Smartcontrakt(500, 10, 5)
-    var h1 = new Teacher("Denis", "Predator", 34, "DenV@gmail.com", addr1, "Deniss", "123", 0, 1000, smartcontrakt_1, 10)
-    var s1 = new Student("Vova", "Amogus", 17, "VovaVV@gmail.com", addr2, "VoVva", "456", 0, 1000, smartcontrakt_1)
-    var s2 = new Student("Roma", "Zarkov", 18, "Roam@gmail.com", addr3, "RROOMMAA", "678", 0, 1000, smartcontrakt_1)
-    var s3 = new Student("liza", "Potapova", 18, "LisaP@gmail.com", addr3, "lissaa", "890", 0, 1000, smartcontrakt_1)
-    var s4 = new Student("viktor", "Kolesnik", 18, "VikotrL@gmail.com", addr3, "viktorr", "012", 0, 1000, smartcontrakt_1)
-    var s5 = new Student("Sacha", "Alexandrov", 18, "SachaA@gmail.com", addr3, "sanyAA", "345", 0, 1000, smartcontrakt_1)
-    var birrga = new Birrga()
-    var platform = new Platform()
-    h1.addinlist(s1)
-    h1.addinlist(s2)
-    h1.addinlist(s3)
-    h1.addinlist(s4)
-    h1.addinlist(s5)
 
-    println(h1.Show())
-    println(h1.showlist())
-    h1.evaluation(birrga, platform)
-    println(h1.Show())
-    println(h1.showlist())
+    val students = List(
+      new Student("Oleg", "Amogus", age = 21, scholarship = 1200, priceCourse = 120.0f),
+      new Student("Vladick", "Perfenow", age = 19, scholarship = 750, priceCourse = 120.0f),
+      new Student("Viktor", "Stamina", age = 49, scholarship = 750, priceCourse = 120.0f)
+    )
 
-    println(birrga.Show())
-    println(platform.Show());}
+    val teacher = new Coach(name = "Igor", surname = "Dmitrievich", age = 42, priceCourse = 500, salary = 500)
+    val countStudents = students.length
+
+    println("\nStudents:")
+    students.foreach(_.printStudentInfo())
+
+    println("Coach:")
+    teacher.printCoachInfo()
+    println(s"Count students: $countStudents\n")
+
+    println("Simulation:")
+
+    students.foreach { student =>
+      val simulation = new Simulation(scholarship = student.scholarship, priceCourse = 500, salary = 0)
+
+      simulation.oldScholarship()
+      val tokens = student.calculateTokens(List.fill(5)(Random.nextInt(5) + 1))
+      simulation.newScholarshipFunc(tokens)
+      simulation.registerContinue(tokens, priceCourse = 500.0f)
+    }
+
+    val teacher1 = new Simulation(scholarship = 1200, priceCourse = 500, salary = 500)
+    teacher1.salaryTeacher(priceCourse = 500, studentLearn = countStudents)
+  }
 }
